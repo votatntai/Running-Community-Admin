@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "admin-running-community",
+    "public": "dist/fuse",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

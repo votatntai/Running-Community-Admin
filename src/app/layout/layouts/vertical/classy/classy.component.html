@@ -20,8 +20,9 @@
         <!-- User -->
         <div class="flex flex-col items-center w-full p-4">
             <div class="relative w-24 h-24">
-                <img class="w-full h-full rounded-full" *ngIf="user.avatar" [src]="user.avatar" alt="User avatar">
-                <mat-icon class="icon-size-24" *ngIf="!user.avatar"
+                <img class="w-full h-full rounded-full" *ngIf="user.avatarUrl" [src]="user.avatarUrl"
+                    alt="User avatar url">
+                <mat-icon class="icon-size-24" *ngIf="!user.avatarUrl"
                     [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
             </div>
             <div class="flex flex-col items-center justify-center w-full mt-6">
@@ -31,7 +32,7 @@
                 </div>
                 <div
                     class="w-full mt-0.5 whitespace-nowrap text-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary">
-                    {{user.email}}
+                    {{user.phone}}
                 </div>
             </div>
         </div>

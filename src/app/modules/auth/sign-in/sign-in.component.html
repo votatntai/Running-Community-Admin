@@ -27,12 +27,9 @@
                     <!-- Email field -->
                     <mat-form-field class="w-full">
                         <mat-label>Email address</mat-label>
-                        <input id="email" matInput [formControlName]="'email'">
-                        <mat-error *ngIf="signInForm.get('email').hasError('required')">
-                            Email address is required
-                        </mat-error>
-                        <mat-error *ngIf="signInForm.get('email').hasError('email')">
-                            Please enter a valid email address
+                        <input id="phone" matInput [formControlName]="'phone'">
+                        <mat-error *ngIf="signInForm.get('phone').hasError('required')">
+                            Phone is required
                         </mat-error>
                     </mat-form-field>
 
