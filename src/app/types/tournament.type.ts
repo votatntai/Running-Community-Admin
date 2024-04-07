@@ -1,0 +1,16 @@
+export interface Tournament {
+    id: string,
+    title: string,
+    thumbnailUrl: string,
+    description: string,
+    rule: string,
+    maximumMember?: number,
+    distance: number,
+    registerDuration: string,
+    startTime: string,
+    endTime: string,
+    address: string,
+    longitude: number,
+    latitude: number,
+    createAt: string,
+}

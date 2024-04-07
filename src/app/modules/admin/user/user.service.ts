@@ -46,7 +46,6 @@ export class UserService {
  */
     getUsers(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string):
         Observable<{ pagination: Pagination; data: User[] }> {
-        console.log('Call API');
         return this._httpClient.get<{ pagination: Pagination; data: User[] }>('/api/users', {
             params: {
                 pageSize: '' + pageSize,

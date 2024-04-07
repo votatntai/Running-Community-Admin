@@ -8,7 +8,7 @@
             <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
         </div>
         <!-- Title -->
-        <div class="text-4xl font-extrabold tracking-tight">User management</div>
+        <div class="text-4xl font-extrabold tracking-tight">Users</div>
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
             <!-- Search -->
@@ -28,9 +28,6 @@
                     matSort matSortDisableClear>
                     <div>Avatar</div>
                     <div [mat-sort-header]="'name'">Name</div>
-                    <div class="hidden sm:block">
-                        Gender
-                    </div>
                     <div class="hidden sm:block">
                         Phone
                     </div>
@@ -62,11 +59,6 @@
                                 <!-- Name -->
                                 <div class="truncate">
                                     {{user.name}}
-                                </div>
-
-                                <!-- Gender -->
-                                <div class="hidden sm:block">
-                                    {{user.gender}}
                                 </div>
 
                                 <!-- Phone -->

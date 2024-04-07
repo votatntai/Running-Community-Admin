@@ -7,7 +7,7 @@ export default [
         path: '',
         component: UserComponent,
         resolve: {
-            driver: UsersResolver
+            users: UsersResolver
         },
     },
 ] as Routes;

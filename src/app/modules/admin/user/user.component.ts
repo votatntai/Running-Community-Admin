@@ -49,9 +49,6 @@ export class UserComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         // Get the products
         this.users$ = this._userService.users$;
-        this.users$.subscribe(user => {
-            console.log(user);
-        })
 
         // Get the pagination
         this._userService.pagination$

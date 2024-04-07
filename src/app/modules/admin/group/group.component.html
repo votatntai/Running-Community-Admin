@@ -1,0 +1,128 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">Groups</div>
+        <!-- Actions -->
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Tìm kiếm'">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- Groups list -->
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+        <ng-container *ngIf="(groups$ | async) as groups">
+            <div class="grid">
+                <!-- Header -->
+                <div class="group-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    matSort matSortDisableClear>
+                    <div>Thumbnail</div>
+                    <div [mat-sort-header]="'name'">Name</div>
+                    <div class="hidden sm:block">
+                        Description
+                    </div>
+                    <div class="hidden sm:block">
+                        Members
+                    </div>
+                    <div class="hidden sm:block">Create At</div>
+                    <div class="hidden sm:block">Detail</div>
+                </div>
+                <!-- Rows -->
+                <ng-container *ngIf="groups.length > 0; else noGroups">
+                    <ng-container *ngIf="(groups$ | async) as groups">
+                        <ng-container *ngFor="let group of groups; trackBy: trackByFn">
+                            <div class="group-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                <!-- Image -->
+                                <div class="flex items-center">
+                                    <div
+                                        class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
+                                        <img class="w-8" *ngIf="group.avartarUrl" [alt]="'Group thumbnail image'"
+                                            [src]="group.avartarUrl">
+                                        <div class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
+                                            *ngIf="!group.avartarUrl">
+                                            NO THUMB
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Name -->
+                                <div class="truncate">
+                                    {{group.name}}
+                                </div>
+
+
+                                <!-- Phone -->
+                                <div class="hidden sm:block truncate">
+                                    {{group.description }}
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="hidden sm:block">
+                                    {{group.groupMembers.length}}
+                                </div>
+
+
+                                <!-- Phone -->
+                                <div class="hidden sm:block">
+                                    {{group.createAt | date }}
+                                </div>
+
+                                <!-- Action -->
+                                <div class="hidden sm:block">
+                                    <div class="flex gap-3">
+                                        <span [routerLink]="['/accounts/groups', group.id]">
+                                            <mat-icon class="text-blue-500 icon-size-5 cursor-pointer"
+                                                [svgIcon]="'heroicons_outline:eye'"></mat-icon>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+
+            </div>
+
+            <mat-paginator
+                class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.totalRow"
+                [pageIndex]="pagination.pageNumber" [pageSize]="pagination.pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]" [showFirstLastButtons]="true">
+            </mat-paginator>
+        </ng-container>
+
+        <ng-template #noGroups>
+            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không tìm thấy tài khoản
+                nào!
+            </div>
+        </ng-template>
+
+    </div>
+
+</div>
+
+<!-- Notification -->
+<a class="cursor-pointer" *ngIf="flashMessage">
+    <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'success'" [appearance]="'border'"
+        *ngIf="flashMessage === 'success'">
+        <span fuseAlertTitle>Thành công</span>
+        {{message}}
+    </fuse-alert>
+    <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'error'" [appearance]="'border'"
+        *ngIf="flashMessage === 'error'">
+        <span fuseAlertTitle>Có lỗi xảy ra</span>
+        {{message}}
+    </fuse-alert>
+</a>
