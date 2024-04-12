@@ -11,10 +11,11 @@
         <div class="text-4xl font-extrabold tracking-tight">Tournaments</div>
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
+            <button mat-raised-button color="primary" (click)="onNewTournamentButtonClicked()">New Tournament</button>
             <!-- Search -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
-                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Tìm kiếm'">
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search'">
             </mat-form-field>
         </div>
     </div>
@@ -50,10 +51,10 @@
                                 <div class="flex items-center">
                                     <div
                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
-                                        <img class="w-8" *ngIf="tournament.avartarUrl"
-                                            [alt]="'Tournament thumbnail image'" [src]="tournament.avartarUrl">
+                                        <img class="w-8" *ngIf="tournament.thumbnailUrl"
+                                            [alt]="'Tournament thumbnail image'" [src]="tournament.thumbnailUrl">
                                         <div class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
-                                            *ngIf="!tournament.avartarUrl">
+                                            *ngIf="!tournament.thumbnailUrl">
                                             NO THUMB
                                         </div>
                                     </div>
@@ -110,8 +111,7 @@
         </ng-container>
 
         <ng-template #noTournaments>
-            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không tìm thấy tài khoản
-                nào!
+            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Not found!
             </div>
         </ng-template>
 

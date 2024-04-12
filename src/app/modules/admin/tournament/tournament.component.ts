@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Tournament } from 'app/types/tournament.type';
+import { CreateTournamentComponent } from './create/create-tournament.component';
 
 @Component({
     selector: 'app-tournament',
@@ -116,6 +117,19 @@ export class TournamentComponent implements OnInit, AfterViewInit {
                     this.isLoading = false;
                 })
             ).subscribe();
+    }
+
+    onNewTournamentButtonClicked() {
+        this._dialog.open(CreateTournamentComponent, {
+            width: '1080px'
+        }).afterClosed().subscribe(result => {
+            // After dialog closed
+            if (result === 'success') {
+                this.showFlashMessage(result, 'Tạo mới thành công', 3000);
+            } else {
+                this.showFlashMessage(result, 'Đã có lỗi xảy ra', 3000);
+            }
+        })
     }
 
     private showFlashMessage(type: 'success' | 'error', message: string, time: number): void {

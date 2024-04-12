@@ -14,7 +14,7 @@
             <!-- Search -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
-                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Tìm kiếm'">
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search'">
             </mat-form-field>
         </div>
     </div>
@@ -47,10 +47,10 @@
                                 <div class="flex items-center">
                                     <div
                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
-                                        <img class="w-8" *ngIf="group.avartarUrl" [alt]="'Group thumbnail image'"
-                                            [src]="group.avartarUrl">
+                                        <img class="w-8" *ngIf="group.thumbnailUrl" [alt]="'Group thumbnail image'"
+                                            [src]="group.thumbnailUrl">
                                         <div class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
-                                            *ngIf="!group.avartarUrl">
+                                            *ngIf="!group.thumbnailUrl">
                                             NO THUMB
                                         </div>
                                     </div>
@@ -104,8 +104,7 @@
         </ng-container>
 
         <ng-template #noGroups>
-            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không tìm thấy tài khoản
-                nào!
+            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Not found!
             </div>
         </ng-template>
 

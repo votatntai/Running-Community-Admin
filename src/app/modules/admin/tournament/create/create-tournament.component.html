@@ -1,0 +1,164 @@
+<div class="flex flex-col flex-auto -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 shadow">
+        <span class="font-semibold text-lg">
+            Create Tournament
+        </span>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-auto items-center sm:items-start p-8 pb-6 sm:pb-8">
+
+        <mat-stepper #stepper class="w-full">
+            <mat-step [stepControl]="thumbnailForm" label="Thumbnail">
+                <div class="flex flex-col items-center my-5">
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden="true">
+                    @if (!imageUrl) {
+                    <div class="flex w-1/3 aspect-square bg-slate-100 items-center justify-center cursor-pointer rounded-md"
+                        (click)="selectFile()">
+                        <div class="flex flex-col items-center justify-center">
+                            <mat-icon class="icon-size-18" svgIcon="heroicons_outline:document-arrow-up"></mat-icon>
+                            <p class="font-semibold">Select image...</p>
+                        </div>
+                    </div>
+                    } @else {
+                    <div class="w-1/3 cursor-pointer" (click)="selectFile()">
+                        <img class="aspect-square rounded-md object-cover" [src]="imageUrl" alt="Preview">
+                    </div>
+                    }
+                    <div class="w-full flex justify-end">
+                        <button class="flex" mat-raised-button color="primary" matStepperNext>Next</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step [stepControl]="createTournamentForm">
+                <form [formGroup]="createTournamentForm" class="w-full">
+                    <ng-template matStepLabel>Information</ng-template>
+                    <div class="grid gap-3">
+                        <div class="w-full">
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <mat-form-field class="w-full">
+                                    <mat-label>Title</mat-label>
+                                    <input matInput [formControlName]="'title'" />
+                                </mat-form-field>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+
+                                <!-- Password -->
+                                <div class="mb-3">
+                                    <mat-form-field class="w-full">
+                                        <mat-label>Description</mat-label>
+                                        <textarea matInput placeholder="Ex. It makes me feel..."
+                                            [formControlName]="'description'"></textarea>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Confirm -->
+                                <div class="mb-3">
+                                    <mat-form-field class="w-full">
+                                        <mat-label>Rule</mat-label>
+                                        <textarea matInput placeholder="Ex. It makes me feel..."
+                                            [formControlName]="'rule'"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 w-full mb-3">
+                                <!-- Name -->
+                                <mat-form-field class="w-full">
+                                    <mat-label>Maximum Member</mat-label>
+                                    <input matInput type="number" [formControlName]="'maximumMember'" />
+                                </mat-form-field>
+
+                                <!-- Gender -->
+                                <mat-form-field class="w-full">
+                                    <mat-label>Distance</mat-label>
+                                    <input matInput type="number" [formControlName]="'distance'" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3 w-full">
+                                <div class="mb-3">
+                                    <!-- Bank name -->
+                                    <mat-form-field class="w-full">
+                                        <mat-label>Register Duration</mat-label>
+                                        <input matInput [matDatepicker]="registerDuration"
+                                            [formControlName]="'registerDuration'">
+                                        <mat-datepicker-toggle matIconSuffix
+                                            [for]="registerDuration"></mat-datepicker-toggle>
+                                        <mat-datepicker #registerDuration></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mb-3">
+                                    <!-- Bank account number -->
+                                    <mat-form-field class="w-full">
+                                        <mat-label>Start Time</mat-label>
+                                        <input matInput [matDatepicker]="startTime" [formControlName]="'startTime'">
+                                        <mat-datepicker-toggle matIconSuffix [for]="startTime"></mat-datepicker-toggle>
+                                        <mat-datepicker #startTime></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="mb-3">
+                                    <mat-form-field class="w-full">
+                                        <mat-label>End Time</mat-label>
+                                        <input matInput [matDatepicker]="endTime" [formControlName]="'endTime'">
+                                        <mat-datepicker-toggle matIconSuffix [for]="endTime"></mat-datepicker-toggle>
+                                        <mat-datepicker #endTime></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <mat-form-field class="w-full mb-3">
+                                <mat-label>Address</mat-label>
+                                <textarea matInput placeholder="Ex. S.102 Vinhomes Grand Park..."
+                                    [formControlName]="'address'"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex justify-end gap-4">
+                    <button class="flex" mat-raised-button color="primary" matStepperPrevious>Back</button>
+                    <button class="flex" mat-raised-button color="primary" matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step [stepControl]="positionForm" label="Address">
+
+                <div class="my-5">
+                    <google-map width="100%"></google-map>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button class="flex" mat-raised-button color="primary" matStepperPrevious>Back</button>
+                    <button class="flex" mat-raised-button color="primary" matStepperNext>Next</button>
+                </div>
+            </mat-step>
+
+            <mat-step [stepControl]="positionForm" label="Archivement">
+                <div class="my-5">
+
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button class="flex" mat-raised-button color="primary" matStepperPrevious>Back</button>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </div>
+
+</div>
+
+
+<!-- <div class="flex justify-end">
+    <button mat-raised-button [color]="'primary'" (click)="createTournament()">
+        <span>Create</span>
+        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+    </button>
+</div> -->
