@@ -1,18 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { fuseAnimations } from '@fuse/animations';
-import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import { GroupService } from './group.service';
-import { Pagination } from 'app/types/pagination.type';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { jsonToFormData } from 'app/extensions/form-data-extentions';
+import { PipesModule } from 'app/pipes/pipe.module';
 import { Group } from 'app/types/group.type';
+import { Pagination } from 'app/types/pagination.type';
+import { Observable, Subject, debounceTime, map, merge, switchMap, takeUntil } from 'rxjs';
+import { GroupService } from './group.service';
 
 @Component({
     selector: 'app-group',
@@ -22,7 +27,9 @@ import { Group } from 'app/types/group.type';
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: fuseAnimations,
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule]
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule,
+        PipesModule, MatSelectModule, MatOptionModule
+    ]
 })
 
 export class GroupComponent implements OnInit, AfterViewInit {
@@ -31,6 +38,8 @@ export class GroupComponent implements OnInit, AfterViewInit {
     @ViewChild(MatSort) private _sort: MatSort;
 
     groups$: Observable<Group[]>;
+    query: string;
+    status: string;
 
     flashMessage: 'success' | 'error' | null = null;
     message: string = null;
@@ -43,6 +52,7 @@ export class GroupComponent implements OnInit, AfterViewInit {
     constructor(
         private _groupService: GroupService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _fuseConfirmationService: FuseConfirmationService,
         private _dialog: MatDialog
     ) { }
 
@@ -102,6 +112,29 @@ export class GroupComponent implements OnInit, AfterViewInit {
         }
     }
 
+    onBlockGroupClicked(id: string) {
+        this._fuseConfirmationService.open().afterClosed().subscribe(result => {
+            if (result == 'confirmed') {
+                var data = jsonToFormData({ status: 'Blocked' });
+                this._groupService.updateGroup(id, data).subscribe();
+            }
+        })
+    }
+
+    onUnBlockGroupClicked(id: string) {
+        this._fuseConfirmationService.open().afterClosed().subscribe(result => {
+            if (result == 'confirmed') {
+                var data = jsonToFormData({ status: 'Active' });
+                this._groupService.updateGroup(id, data).subscribe();
+            }
+        })
+    }
+
+    onStatusFilterChanged(event: any) {
+        this.status = event.value;
+        return this._groupService.getGroups(0, 10, 'name', 'asc', this.query, this.status).subscribe();
+    }
+
     subscribeSearchInput() {
         // Subscribe to search input field value changes
         this.searchInputControl.valueChanges
@@ -109,8 +142,9 @@ export class GroupComponent implements OnInit, AfterViewInit {
                 takeUntil(this._unsubscribeAll),
                 debounceTime(300),
                 switchMap((query) => {
+                    this.query = query;
                     this.isLoading = true;
-                    return this._groupService.getGroups(0, 10, 'name', 'asc', query);
+                    return this._groupService.getGroups(0, 10, 'name', 'asc', this.query, this.status);
                 }),
                 map(() => {
                     this.isLoading = false;

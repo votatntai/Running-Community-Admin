@@ -14,6 +14,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Tournament } from 'app/types/tournament.type';
 import { CreateTournamentComponent } from './create/create-tournament.component';
+import { PipesModule } from 'app/pipes/pipe.module';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
     selector: 'app-tournament',
@@ -23,7 +26,10 @@ import { CreateTournamentComponent } from './create/create-tournament.component'
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: fuseAnimations,
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule]
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule,
+        ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule, PipesModule,
+        MatSelectModule, MatOptionModule
+    ]
 })
 
 export class TournamentComponent implements OnInit, AfterViewInit {
@@ -32,6 +38,8 @@ export class TournamentComponent implements OnInit, AfterViewInit {
     @ViewChild(MatSort) private _sort: MatSort;
 
     tournaments$: Observable<Tournament[]>;
+    status: string;
+    query: string;
 
     flashMessage: 'success' | 'error' | null = null;
     message: string = null;
@@ -103,6 +111,11 @@ export class TournamentComponent implements OnInit, AfterViewInit {
         }
     }
 
+    onStatusFilterChanged(event: any) {
+        this.status = event.value;
+        return this._tournamentService.getTournaments(0, 10, 'name', 'asc', this.query, this.status).subscribe();
+    }
+
     subscribeSearchInput() {
         // Subscribe to search input field value changes
         this.searchInputControl.valueChanges
@@ -110,8 +123,9 @@ export class TournamentComponent implements OnInit, AfterViewInit {
                 takeUntil(this._unsubscribeAll),
                 debounceTime(300),
                 switchMap((query) => {
+                    this.query = query;
                     this.isLoading = true;
-                    return this._tournamentService.getTournaments(0, 10, 'name', 'asc', query);
+                    return this._tournamentService.getTournaments(0, 10, 'name', 'asc', this.query, this.status);
                 }),
                 map(() => {
                     this.isLoading = false;

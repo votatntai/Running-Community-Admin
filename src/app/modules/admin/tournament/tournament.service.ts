@@ -44,7 +44,7 @@ export class TournamentService {
  * @param order
  * @param search
  */
-    getTournaments(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string):
+    getTournaments(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string, status?: string):
         Observable<{ pagination: Pagination; data: Tournament[] }> {
         return this._httpClient.get<{ pagination: Pagination; data: Tournament[] }>('/api/tournaments', {
             params: {
@@ -52,6 +52,7 @@ export class TournamentService {
                 pageNumber: '' + pageNumber,
                 sort,
                 order,
+                ...(status !== null && status !== undefined && { status }),
                 title: search || ''
             }
         }).pipe(
@@ -79,24 +80,6 @@ export class TournamentService {
                 })
             ))
         );
-    }
-
-    /**
- * Get tournament by id
- */
-    updateTournamentAccountStatus(id: string, status: boolean) {
-        return this.tournaments$.pipe(
-            take(1),
-            switchMap(() => this._httpClient.put<Tournament>('/api/tournaments/' + id, { accountStatus: status }).pipe(
-                map((updatedTournament) => {
-
-                    // Update current tournament
-                    this._tournament.next(updatedTournament);
-
-                    return updatedTournament;
-                })
-            ))
-        )
     }
 
     /**

@@ -22,27 +22,31 @@
 /* Large devices (laptops/desktops, 960px and up) */
 @media only screen and (min-width: 960px) {
     .group-grid {
-        grid-template-columns: 48px 168px auto 196px 168px 96px;
+        grid-template-columns: 48px 168px auto 196px 168px 96px 96px;
     }
 }
 
 /* Extra large devices (large laptops and desktops, 1280px and up) */
 @media only screen and (min-width: 1280px) {
     .group-grid {
-        grid-template-columns: 96px 248px auto 96px 196px 96px;
+        grid-template-columns: 96px 248px auto 96px 196px 96px 96px;
     }
 }
 
 /* Extra large devices (large laptops and desktops, 1520px and up) */
 @media only screen and (min-width: 1520px) {
     .group-grid {
-        grid-template-columns: 96px 248px auto 212px 168px 112px;
+        grid-template-columns: 96px 248px auto 212px 168px 168px 112px;
     }
 }
 
 /* Extra large devices (large laptops and desktops, 1680px and up) */
 @media only screen and (min-width: 1660px) {
     .group-grid {
-        grid-template-columns: 96px 268px auto 268px 168px 168px;
+        grid-template-columns: 96px 268px auto 268px 168px 168px 168px;
     }
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
 }

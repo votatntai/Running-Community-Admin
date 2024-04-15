@@ -13,6 +13,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { PipesModule } from 'app/pipes/pipe.module';
+import { jsonToFormData } from 'app/extensions/form-data-extentions';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
     selector: 'app-user',
@@ -22,7 +27,9 @@ import { MatInputModule } from '@angular/material/input';
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: fuseAnimations,
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule]
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule,
+        PipesModule, MatSelectModule, MatOptionModule
+    ]
 })
 
 export class UserComponent implements OnInit, AfterViewInit {
@@ -31,6 +38,8 @@ export class UserComponent implements OnInit, AfterViewInit {
     @ViewChild(MatSort) private _sort: MatSort;
 
     users$: Observable<User[]>;
+    query: string;
+    status: string;
 
     flashMessage: 'success' | 'error' | null = null;
     message: string = null;
@@ -43,6 +52,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     constructor(
         private _userService: UserService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _fuseConfirmationService: FuseConfirmationService,
         private _dialog: MatDialog
     ) { }
 
@@ -109,13 +119,37 @@ export class UserComponent implements OnInit, AfterViewInit {
                 takeUntil(this._unsubscribeAll),
                 debounceTime(300),
                 switchMap((query) => {
+                    this.query = query;
                     this.isLoading = true;
-                    return this._userService.getUsers(0, 10, 'name', 'asc', query);
+                    return this._userService.getUsers(0, 10, 'name', 'asc', this.query, this.status);
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
             ).subscribe();
+    }
+
+    onStatusFilterChanged(event: any) {
+        this.status = event.value;
+        return this._userService.getUsers(0, 10, 'name', 'asc', this.query, this.status).subscribe();
+    }
+
+    onBlockGroupClicked(id: string) {
+        this._fuseConfirmationService.open().afterClosed().subscribe(result => {
+            if (result == 'confirmed') {
+                var data = jsonToFormData({ status: 'Blocked' });
+                this._userService.updateUser(id, data).subscribe();
+            }
+        })
+    }
+
+    onUnBlockGroupClicked(id: string) {
+        this._fuseConfirmationService.open().afterClosed().subscribe(result => {
+            if (result == 'confirmed') {
+                var data = jsonToFormData({ status: 'Active' });
+                this._userService.updateUser(id, data).subscribe();
+            }
+        })
     }
 
     private showFlashMessage(type: 'success' | 'error', message: string, time: number): void {

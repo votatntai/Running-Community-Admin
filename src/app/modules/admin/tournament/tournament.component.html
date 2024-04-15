@@ -12,6 +12,14 @@
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
             <button mat-raised-button color="primary" (click)="onNewTournamentButtonClicked()">New Tournament</button>
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64">
+                <mat-select required [value]="''" (selectionChange)="onStatusFilterChanged($event)">
+                    <mat-option [value]="''">All Status</mat-option>
+                    <mat-option [value]="'Not Happen'">Not Happen</mat-option>
+                    <mat-option [value]="'Happening'">Happening</mat-option>
+                    <mat-option [value]="'Finished'">Finished</mat-option>
+                </mat-select>
+            </mat-form-field>
             <!-- Search -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
@@ -39,6 +47,7 @@
                         End Time
                     </div>
                     <div class="hidden sm:block">Address</div>
+                    <div class="hidden sm:block">Status</div>
                     <div class="hidden sm:block">Detail</div>
                 </div>
                 <!-- Rows -->
@@ -83,6 +92,11 @@
                                 <!-- Phone -->
                                 <div class="hidden sm:block">
                                     {{tournament.address}}
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="hidden sm:block">
+                                    <div [innerHTML]="tournament.startTime | tournamentStatus:tournament.endTime"></div>
                                 </div>
 
                                 <!-- Action -->

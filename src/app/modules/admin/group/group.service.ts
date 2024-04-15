@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pagination } from 'app/types/pagination.type';
 import { Group } from 'app/types/group.type';
@@ -38,13 +38,8 @@ export class GroupService {
  * Get groups
  *
  *
- * @param page
- * @param size
- * @param sort
- * @param order
- * @param search
  */
-    getGroups(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string):
+    getGroups(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string, status?: string):
         Observable<{ pagination: Pagination; data: Group[] }> {
         return this._httpClient.get<{ pagination: Pagination; data: Group[] }>('/api/groups', {
             params: {
@@ -52,6 +47,7 @@ export class GroupService {
                 pageNumber: '' + pageNumber,
                 sort,
                 order,
+                ...(status !== null && status !== undefined && { status }),
                 name: search || ''
             }
         }).pipe(
@@ -79,24 +75,6 @@ export class GroupService {
                 })
             ))
         );
-    }
-
-    /**
- * Get group by id
- */
-    updateGroupAccountStatus(id: string, status: boolean) {
-        return this.groups$.pipe(
-            take(1),
-            switchMap(() => this._httpClient.put<Group>('/api/groups/' + id, { accountStatus: status }).pipe(
-                map((updatedGroup) => {
-
-                    // Update current group
-                    this._group.next(updatedGroup);
-
-                    return updatedGroup;
-                })
-            ))
-        )
     }
 
     /**

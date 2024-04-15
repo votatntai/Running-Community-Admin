@@ -44,7 +44,7 @@ export class UserService {
  * @param order
  * @param search
  */
-    getUsers(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string):
+    getUsers(pageNumber: number = 0, pageSize: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search?: string, status?: string):
         Observable<{ pagination: Pagination; data: User[] }> {
         return this._httpClient.get<{ pagination: Pagination; data: User[] }>('/api/users', {
             params: {
@@ -52,6 +52,7 @@ export class UserService {
                 pageNumber: '' + pageNumber,
                 sort,
                 order,
+                ...(status !== null && status !== undefined && { status }),
                 name: search || ''
             }
         }).pipe(
@@ -79,24 +80,6 @@ export class UserService {
                 })
             ))
         );
-    }
-
-    /**
- * Get user by id
- */
-    updateUserAccountStatus(id: string, status: boolean) {
-        return this.users$.pipe(
-            take(1),
-            switchMap(() => this._httpClient.put<User>('/api/users/' + id, { accountStatus: status }).pipe(
-                map((updatedUser) => {
-
-                    // Update current user
-                    this._user.next(updatedUser);
-
-                    return updatedUser;
-                })
-            ))
-        )
     }
 
     /**

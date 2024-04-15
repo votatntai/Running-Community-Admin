@@ -11,6 +11,13 @@
         <div class="text-4xl font-extrabold tracking-tight">Groups</div>
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64">
+                <mat-select required [value]="''" (selectionChange)="onStatusFilterChanged($event)">
+                    <mat-option [value]="''">All Status</mat-option>
+                    <mat-option [value]="'Active'">Active</mat-option>
+                    <mat-option [value]="'Blocked'">Blocked</mat-option>
+                </mat-select>
+            </mat-form-field>
             <!-- Search -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
@@ -35,6 +42,7 @@
                         Members
                     </div>
                     <div class="hidden sm:block">Create At</div>
+                    <div class="hidden sm:block">Status</div>
                     <div class="hidden sm:block">Detail</div>
                 </div>
                 <!-- Rows -->
@@ -72,19 +80,35 @@
                                     {{group.groupMembers.length}}
                                 </div>
 
-
                                 <!-- Phone -->
                                 <div class="hidden sm:block">
                                     {{group.createAt | date }}
                                 </div>
 
+                                <!-- Phone -->
+                                <div class="hidden sm:block">
+                                    <div [innerHTML]="group.status | groupStatus"></div>
+                                </div>
+
                                 <!-- Action -->
                                 <div class="hidden sm:block">
                                     <div class="flex gap-3">
-                                        <span [routerLink]="['/accounts/groups', group.id]">
+                                        <span [routerLink]="['/groups', group.id]">
                                             <mat-icon class="text-blue-500 icon-size-5 cursor-pointer"
                                                 [svgIcon]="'heroicons_outline:eye'"></mat-icon>
                                         </span>
+                                        @if (group.status == 'Active') {
+
+                                        <span (click)="onBlockGroupClicked(group.id)">
+                                            <mat-icon svgIcon="heroicons_outline:lock-closed"
+                                                class="text-red-500 icon-size-5 cursor-pointer"></mat-icon>
+                                        </span>
+                                        } @else {
+                                        <span (click)="onUnBlockGroupClicked(group.id)">
+                                            <mat-icon svgIcon="heroicons_outline:lock-open"
+                                                class="text-green-500 icon-size-5 cursor-pointer"></mat-icon>
+                                        </span>
+                                        }
                                     </div>
                                 </div>
 

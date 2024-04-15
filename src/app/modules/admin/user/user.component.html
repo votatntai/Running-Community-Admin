@@ -11,6 +11,13 @@
         <div class="text-4xl font-extrabold tracking-tight">Users</div>
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64">
+                <mat-select required [value]="''" (selectionChange)="onStatusFilterChanged($event)">
+                    <mat-option [value]="''">All Status</mat-option>
+                    <mat-option [value]="'Active'">Active</mat-option>
+                    <mat-option [value]="'Blocked'">Blocked</mat-option>
+                </mat-select>
+            </mat-form-field>
             <!-- Search -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
@@ -47,10 +54,10 @@
                                 <div class="flex items-center">
                                     <div
                                         class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
-                                        <img class="w-8" *ngIf="user.avartarUrl" [alt]="'User thumbnail image'"
-                                            [src]="user.avartarUrl">
+                                        <img class="w-8" *ngIf="user.avatarUrl" [alt]="'User thumbnail image'"
+                                            [src]="user.avatarUrl">
                                         <div class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
-                                            *ngIf="!user.avartarUrl">
+                                            *ngIf="!user.avatarUrl">
                                             NO THUMB
                                         </div>
                                     </div>
@@ -71,25 +78,29 @@
                                     {{user.address}}
                                 </div>
 
-                                <!-- Active -->
+                                <!-- Phone -->
                                 <div class="hidden sm:block">
-                                    <ng-container *ngIf="user.accountStatus">
-                                        <mat-icon class="text-green-400 icon-size-5"
-                                            [svgIcon]="'heroicons_solid:check'"></mat-icon>
-                                    </ng-container>
-                                    <ng-container *ngIf="!user.accountStatus">
-                                        <mat-icon class="text-gray-400 icon-size-5"
-                                            [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
-                                    </ng-container>
+                                    <div [innerHTML]="user.status | userStatus"></div>
                                 </div>
 
                                 <!-- Action -->
                                 <div class="hidden sm:block">
                                     <div class="flex gap-3">
-                                        <span [routerLink]="['/accounts/users', user.id]">
+                                        <span [routerLink]="['/users', user.id]">
                                             <mat-icon class="text-blue-500 icon-size-5 cursor-pointer"
                                                 [svgIcon]="'heroicons_outline:eye'"></mat-icon>
                                         </span>
+                                        @if (user.status == 'Active') {
+                                        <span (click)="onBlockGroupClicked(user.id)">
+                                            <mat-icon svgIcon="heroicons_outline:lock-closed"
+                                                class="text-red-500 icon-size-5 cursor-pointer"></mat-icon>
+                                        </span>
+                                        } @else {
+                                        <span (click)="onUnBlockGroupClicked(user.id)">
+                                            <mat-icon svgIcon="heroicons_outline:lock-open"
+                                                class="text-green-500 icon-size-5 cursor-pointer"></mat-icon>
+                                        </span>
+                                        }
                                     </div>
                                 </div>
 
