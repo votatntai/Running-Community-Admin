@@ -3,16 +3,9 @@
     <!-- Header -->
     <div
         class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
-        <!-- Loader -->
-        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
-            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
-        </div>
         <!-- Title -->
         <div class="text-4xl font-extrabold tracking-tight">Dashboards</div>
     </div>
-
-
-
 
     <div
         class="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2 bg-white dark:bg-gray-800">
@@ -60,20 +53,4 @@
             </blockquote>
         </figure>
     </div>
-
-
 </div>
-
-<!-- Notification -->
-<a class="cursor-pointer" *ngIf="flashMessage">
-    <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'success'" [appearance]="'border'"
-        *ngIf="flashMessage === 'success'">
-        <span fuseAlertTitle>Thành công</span>
-        {{message}}
-    </fuse-alert>
-    <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'error'" [appearance]="'border'"
-        *ngIf="flashMessage === 'error'">
-        <span fuseAlertTitle>Có lỗi xảy ra</span>
-        {{message}}
-    </fuse-alert>
-</a>

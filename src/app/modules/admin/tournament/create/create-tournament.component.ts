@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TournamentService } from '../tournament.service';
@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatStepperModule } from '@angular/material/stepper';
-import { GoogleMapsModule } from '@angular/google-maps'
+import { GoogleMap, GoogleMapsModule, MapInfoWindow } from '@angular/google-maps';
 
 @Component({
     selector: 'app-create-tournament',
@@ -23,27 +23,59 @@ import { GoogleMapsModule } from '@angular/google-maps'
         MatSelectModule, MatDialogModule, MatAutocompleteModule, MatDatepickerModule, MatStepperModule, GoogleMapsModule]
 })
 
-export class CreateTournamentComponent implements OnInit {
+export class CreateTournamentComponent implements OnInit, AfterViewInit {
     @ViewChild('fileInput') fileInput: any;
-    imageUrl: string;
+    @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
+    @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow;
+    @ViewChild('addressInput') addressInput: ElementRef;
 
-    center: google.maps.LatLngLiteral;
+    imageUrl: string;
+    imageFile: File;
 
     createTournamentForm: UntypedFormGroup;
     positionForm: UntypedFormGroup;
     thumbnailForm: UntypedFormGroup;
 
+    zoom = 12;
+    center: google.maps.LatLngLiteral = { lat: 10.8735551, lng: 106.7679267 };
+    marker: any = [];
+    autocomplete: google.maps.places.Autocomplete;
+    options: google.maps.MapOptions = {
+    };
+
     constructor(
         private _tournamentServive: TournamentService,
         public matDialogRef: MatDialogRef<CreateTournamentComponent>,
-        private _formBuilder: UntypedFormBuilder
+        private _formBuilder: UntypedFormBuilder,
     ) { }
 
     ngOnInit() {
         this.initCreateTournamentForm();
         this.initPositionForm();
         this.initThumbnailForm();
-        this.setDefaultPosition();
+    }
+
+    ngAfterViewInit() {
+        this.autocomplete = new google.maps.places.Autocomplete(
+            this.addressInput.nativeElement, { types: ['geocode'] }
+        );
+        this.autocomplete.addListener('place_changed', () => {
+            const place = this.autocomplete.getPlace();
+            if (!place.geometry) {
+                // Nếu không tìm thấy geometry cho địa điểm được chọn
+                return;
+            }
+
+            // Lấy lat và lng từ geometry
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+
+            this.center = {
+                lat: lat,
+                lng: lng
+            };
+            this.addMarker();
+        });
     }
 
     private initCreateTournamentForm() {
@@ -53,10 +85,13 @@ export class CreateTournamentComponent implements OnInit {
             rule: ['', [Validators.required]],
             maximumMember: [''],
             distance: ['', Validators.required],
+            fee: [0, Validators.required],
             registerDuration: ['', Validators.required],
             startTime: ['', Validators.required],
             endTime: ['', Validators.required],
             address: ['', [Validators.required]],
+            longitude: ['', [Validators.required]],
+            latitude: ['', [Validators.required]],
         });
     }
 
@@ -73,39 +108,69 @@ export class CreateTournamentComponent implements OnInit {
         });
     }
 
-    public createTournament() {
-        if (this.createTournamentForm.valid) {
-            this._tournamentServive.createTournament(this.createTournamentForm.value).subscribe(result => {
-                if (result) {
-                    this.matDialogRef.close('success');
-                } else {
-                    this.matDialogRef.close('error');
-                }
-            })
-        }
-    }
-
     selectFile() {
         this.fileInput.nativeElement.click();
     }
 
     onFileSelected(event) {
-        const file: File = event.target.files[0];
-        if (file) {
+        this.imageFile = event.target.files[0];
+        if (this.imageFile) {
             const reader = new FileReader();
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(this.imageFile);
             reader.onload = () => {
                 this.imageUrl = reader.result as string;
             };
         }
     }
 
-    setDefaultPosition() {
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.center = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            };
+    mapClick(event: google.maps.KmlMouseEvent) {
+        this.center = {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        this.createTournamentForm.controls['longitude'].setValue(event.latLng.lng());
+        this.createTournamentForm.controls['latitude'].setValue(event.latLng.lat());
+        this.addMarker();
+    }
+
+    onAutocompleteSelected(place: google.maps.places.PlaceResult) {
+        // Ví dụ: di chuyển bản đồ đến địa điểm được chọn
+        this.center = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+        };
+        console.log(this.center);
+    }
+
+    createTournament() {
+        const formData = new FormData();
+        var formGroup = this.createTournamentForm;
+
+        Object.keys(formGroup.controls).forEach(key => {
+            const control = formGroup.get(key);
+            if (control) {
+                formData.append(key, control.value);
+            }
         });
+        formData.append('thumbnail', this.imageFile);
+        this._tournamentServive.createTournament(formData).subscribe(result => {
+            if (result) {
+                this.matDialogRef.close()
+            }
+        });
+    }
+
+    addMarker() {
+        this.marker = {
+            position: {
+                lat: this.center.lat,
+                lng: this.center.lng,
+            },
+            label: {
+                color: 'red',
+                text: 'Pin',
+            },
+            options: { animation: google.maps.Animation.BOUNCE },
+        }
     }
 }
