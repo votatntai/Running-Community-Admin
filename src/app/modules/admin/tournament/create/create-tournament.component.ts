@@ -139,7 +139,6 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng()
         };
-        console.log(this.center);
     }
 
     createTournament() {
@@ -168,7 +167,6 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
             },
             label: {
                 color: 'red',
-                text: 'Pin',
             },
             options: { animation: google.maps.Animation.BOUNCE },
         }

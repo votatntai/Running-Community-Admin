@@ -1,0 +1,48 @@
+<div class="flex flex-col flex-auto -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 shadow">
+        <span class="font-semibold text-lg">
+            Tournament
+        </span>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col flex-auto items-center sm:items-start p-8 pb-6 sm:pb-8 max-h-192 overflow-y-scroll">
+
+        <div class="w-full rounded-lg">
+            <img class="w-full max-h-80 object-cover" [src]="tournament.thumbnailUrl" alt="Card cover image">
+        </div>
+        <div class="flex flex-col flex-auto mt-4 w-full">
+            <div class="text-2xl font-semibold leading-tight">
+                <span [innerHTML]="tournament.startTime | tournamentStatus:tournament.endTime"></span>
+                {{ tournament.title }}
+            </div>
+            <div class="mt-6">
+                <div class="flex flex-wrap items-center text-secondary my-1">
+                    <span class="whitespace-nowrap">{{ tournament.description }}</span>
+                </div>
+                <div class="flex flex-wrap items-center text-secondary my-1">
+                    <span class="whitespace-nowrap">{{ tournament.rule }}</span>
+                </div>
+                <div class="flex flex-wrap items-center text-secondary my-1">
+                    <span class="whitespace-nowrap">Distance: {{ tournament.distance }} km</span>
+                </div>
+                <div class="flex items-center text-secondary my-1">
+                    <span>Registration deadline: {{ tournament.registerDuration | date:'dd-MM-YYYY' }}</span>
+                </div>
+                <div class="flex flex-wrap items-center text-secondary my-1">
+                    <span class="whitespace-nowrap">Start date: {{ tournament.startTime | date:'dd-MM-YYYY' }}</span>
+                </div>
+                <div class="flex flex-wrap items-center text-secondary my-1">
+                    <span class="whitespace-nowrap">End date: {{ tournament.endTime | date:'dd-MM-YYYY' }}</span>
+                </div>
+                <google-map height="300px" width="100%" [zoom]="zoom" [center]="center" [options]="options">
+                    <map-marker [position]="marker.position" [label]="marker.label" [options]="marker.options">
+                    </map-marker>
+                </google-map>
+            </div>
+        </div>
+    </div>

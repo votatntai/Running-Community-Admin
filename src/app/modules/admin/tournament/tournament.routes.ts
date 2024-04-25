@@ -1,13 +1,24 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { TournamentDetailComponent } from './detail/tournament-detail.component';
 import { TournamentComponent } from './tournament.component';
-import { TournamentsResolver } from './tournament.resolvers';
+import { TournamentService } from './tournament.service';
 
 export default [
     {
         path: '',
         component: TournamentComponent,
         resolve: {
-            tournaments: TournamentsResolver
+            tournaments: () => inject(TournamentService).getTournaments(),
         },
+        children: [
+            {
+                path: ':id',
+                component: TournamentDetailComponent,
+                resolve: {
+                    tournament: (route: ActivatedRouteSnapshot) => inject(TournamentService).getTournamentById(route.params['id']),
+                },
+            }
+        ]
     },
 ] as Routes;

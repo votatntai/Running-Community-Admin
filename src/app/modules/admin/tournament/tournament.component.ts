@@ -17,6 +17,8 @@ import { CreateTournamentComponent } from './create/create-tournament.component'
 import { PipesModule } from 'app/pipes/pipe.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { TournamentDetailComponent } from './detail/tournament-detail.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-tournament',
@@ -50,6 +52,7 @@ export class TournamentComponent implements OnInit, AfterViewInit {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
+        private router: Router,
         private _tournamentService: TournamentService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _dialog: MatDialog
@@ -144,6 +147,21 @@ export class TournamentComponent implements OnInit, AfterViewInit {
                 this.showFlashMessage(result, 'Đã có lỗi xảy ra', 3000);
             }
         })
+    }
+
+    openTournamentDetailDialog() {
+        this._dialog.open(TournamentDetailComponent)
+    }
+
+    onTournamentDetailClick(tournamentId: string) {
+        this.router.navigate(['/tournaments', tournamentId]).then(() => {
+            this._dialog.open(TournamentDetailComponent, {
+                width: '1080px',
+                autoFocus: false
+            }).afterClosed().subscribe(data => {
+                this.router.navigate(['/tournaments']);
+            })
+        });
     }
 
     private showFlashMessage(type: 'success' | 'error', message: string, time: number): void {

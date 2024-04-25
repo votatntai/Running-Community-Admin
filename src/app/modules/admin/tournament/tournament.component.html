@@ -76,7 +76,7 @@
 
                                 <!-- Phone -->
                                 <div class="hidden sm:block">
-                                    {{tournament.distance}}
+                                    {{tournament.distance}} km
                                 </div>
 
                                 <!-- Phone -->
@@ -102,7 +102,7 @@
                                 <!-- Action -->
                                 <div class="hidden sm:block">
                                     <div class="flex gap-3">
-                                        <span [routerLink]="['/accounts/tournaments', tournament.id]">
+                                        <span (click)="onTournamentDetailClick(tournament.id)">
                                             <mat-icon class="text-blue-500 icon-size-5 cursor-pointer"
                                                 [svgIcon]="'heroicons_outline:eye'"></mat-icon>
                                         </span>
