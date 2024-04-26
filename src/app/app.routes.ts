@@ -61,6 +61,7 @@ export const appRoutes: Route[] = [
         },
         children: [
             { path: 'home', loadChildren: () => import('app/modules/landing/home/home.routes') },
+            { path: 'payments', loadChildren: () => import('app/modules/admin/payments/payment.routes') },
         ]
     },
 
