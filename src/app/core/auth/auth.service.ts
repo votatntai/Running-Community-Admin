@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
-import { environment } from 'enviroments/environment.prod';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -162,5 +161,24 @@ export class AuthService {
 
         // If the access token exists, and it didn't expire, sign in using it
         return this.signInUsingToken();
+    }
+
+    /**
+* Register device token for notification
+*/
+    registerDeviceToken(deviceToken: string): Observable<boolean> {
+        // Register device token
+        return this._httpClient.post('/api/device-tokens/admins', {
+            deviceToken: deviceToken
+        }).pipe(
+            catchError(() =>
+                // Return false
+                of(false)
+            ),
+            switchMap((response: boolean) => {
+                // Return true
+                return of(response);
+            })
+        );
     }
 }
