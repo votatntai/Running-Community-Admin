@@ -75,8 +75,6 @@ export class TournamentService {
                     // Set value for current tournament
                     this._tournament.next(tournament);
 
-                    console.log(tournament);
-
                     // Return the new contact
                     return tournament;
                 })

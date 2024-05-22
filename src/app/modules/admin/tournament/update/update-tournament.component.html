@@ -1,0 +1,138 @@
+<div class="flex flex-col flex-auto -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 shadow">
+        <span class="font-semibold text-lg">
+            Update Tournament
+        </span>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row flex-auto items-center sm:items-start p-8 pb-6 sm:pb-8">
+        <form [formGroup]="updateTournamentForm" class="w-full">
+            <ng-template matStepLabel>Information</ng-template>
+            <div class="grid gap-3">
+                <div class="w-full">
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <mat-form-field class="w-full">
+                            <mat-label>Title</mat-label>
+                            <input matInput [formControlName]="'title'" />
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <mat-form-field class="w-full">
+                            <mat-label>Description</mat-label>
+                            <textarea rows="5" matInput placeholder="Ex. It makes me feel..."
+                                [formControlName]="'description'"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-3">
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <mat-form-field class="w-full">
+                                <mat-label>Min Age</mat-label>
+                                <input type="number" matInput [formControlName]="'minAge'" />
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <mat-form-field class="w-full">
+                                <mat-label>Max Age</mat-label>
+                                <input type="number" matInput [formControlName]="'maxAge'" />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mb-3">
+                            <!-- Username -->
+                            <mat-form-field class="w-full">
+                                <mat-label>Gender</mat-label>
+                                <mat-select required [value]="data.gender" (selectionChange)="onGenderChanged($event)">
+                                    <mat-option [value]="'Male'">Male</mat-option>
+                                    <mat-option [value]="'Female'">Female</mat-option>
+                                    <mat-option [value]="'Orther'">Orther</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mb-3">
+                            <mat-form-field class="w-full">
+                                <mat-label>Maximum Member</mat-label>
+                                <input matInput type="number" [formControlName]="'maximumMember'" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 w-full">
+                        <div class="mb-3">
+                            <!-- Bank name -->
+                            <mat-form-field class="w-full">
+                                <mat-label>Register Duration</mat-label>
+                                <input matInput [matDatepicker]="registerDuration"
+                                    [formControlName]="'registerDuration'">
+                                <mat-datepicker-toggle matIconSuffix [for]="registerDuration"></mat-datepicker-toggle>
+                                <mat-datepicker #registerDuration></mat-datepicker>
+                            </mat-form-field>
+                            @if(updateTournamentForm.hasError('invalidRegisterDate') &&
+                            updateTournamentForm.get('registerDuration')?.touched) {
+                            <div class="text-red-700 text-sm">
+                                Register date must be at least 3 days after today.
+                            </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <!-- Bank account number -->
+                            <mat-form-field class="w-full">
+                                <mat-label>Start Time</mat-label>
+                                <input matInput [matDatepicker]="startTime" [formControlName]="'startTime'">
+                                <mat-datepicker-toggle matIconSuffix [for]="startTime"></mat-datepicker-toggle>
+                                <mat-datepicker #startTime></mat-datepicker>
+                            </mat-form-field>
+                            @if(updateTournamentForm.hasError('invalidStartDate') &&
+                            updateTournamentForm.get('startTime')?.touched) {
+                            <div class="text-red-700 text-sm">
+                                Start date must be at least 3 days after register date.
+                            </div>
+                            }
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <mat-form-field class="w-full">
+                                <mat-label>End Time</mat-label>
+                                <input matInput [matDatepicker]="endTime" [formControlName]="'endTime'">
+                                <mat-datepicker-toggle matIconSuffix [for]="endTime"></mat-datepicker-toggle>
+                                <mat-datepicker #endTime></mat-datepicker>
+                            </mat-form-field>
+                            @if(updateTournamentForm.hasError('invalidEndDate') &&
+                            updateTournamentForm.get('endTime')?.touched) {
+                            <div class="text-red-700 text-sm">
+                                End date must be equal to or after start date.
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-3">
+                <button class="flex" mat-raised-button color="primary" (click)="updateTournament()">Update</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<!-- <div class="flex justify-end">
+    <button mat-raised-button [color]="'primary'" (click)="updateTournament()">
+        <span>Create</span>
+        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+    </button>
+</div> -->

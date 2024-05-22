@@ -106,6 +106,10 @@
                                             <mat-icon class="text-blue-500 icon-size-5 cursor-pointer"
                                                 [svgIcon]="'heroicons_outline:eye'"></mat-icon>
                                         </span>
+                                        <span (click)="onUpdateTournamentButtonClicked(tournament)">
+                                            <mat-icon class="text-orange-500 icon-size-5 cursor-pointer"
+                                                [svgIcon]="'heroicons_outline:pencil-square'"></mat-icon>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -137,12 +141,12 @@
 <a class="cursor-pointer" *ngIf="flashMessage">
     <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'success'" [appearance]="'border'"
         *ngIf="flashMessage === 'success'">
-        <span fuseAlertTitle>Thành công</span>
+        <span fuseAlertTitle>Success</span>
         {{message}}
     </fuse-alert>
     <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'error'" [appearance]="'border'"
         *ngIf="flashMessage === 'error'">
-        <span fuseAlertTitle>Có lỗi xảy ra</span>
+        <span fuseAlertTitle>Error</span>
         {{message}}
     </fuse-alert>
 </a>

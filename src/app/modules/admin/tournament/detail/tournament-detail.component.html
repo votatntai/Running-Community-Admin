@@ -22,22 +22,51 @@
             </div>
             <div class="mt-6">
                 <div class="flex flex-wrap items-center text-secondary my-1">
-                    <span class="whitespace-nowrap">{{ tournament.description }}</span>
+                    <span>{{ tournament.description }}</span>
                 </div>
                 <div class="flex flex-wrap items-center text-secondary my-1">
-                    <span class="whitespace-nowrap">{{ tournament.rule }}</span>
+                    <span>{{ tournament.rule }}</span>
                 </div>
-                <div class="flex flex-wrap items-center text-secondary my-1">
-                    <span class="whitespace-nowrap">Distance: {{ tournament.distance }} km</span>
+                <div class="grid grid-cols-2">
+                    <div>
+                        <div class="flex flex-wrap items-center text-secondary my-1">
+                            <span>Distance: <span class="font-bold">{{ tournament.distance }}</span> km</span>
+                        </div>
+                        <div class="flex items-center text-secondary my-1">
+                            <span>Registration deadline: <span class="font-bold">{{ tournament.registerDuration |
+                                    date:'dd-MM-YYYY' }}</span></span>
+                        </div>
+                        <div class="flex flex-wrap items-center text-secondary my-1">
+                            <span>Start date: <span class="font-bold">{{ tournament.startTime | date:'dd-MM-YYYY'
+                                    }}</span></span>
+                        </div>
+                        <div class="flex flex-wrap items-center text-secondary my-1">
+                            <span>End date: <span class="font-bold">{{ tournament.endTime | date:'dd-MM-YYYY'
+                                    }}</span></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center text-secondary my-1">
+                            <span>Min Age: <span class="font-bold"> {{ tournament.minAge }}</span></span>
+                        </div>
+                        <div class="flex items-center text-secondary my-1">
+                            <span>Max Age: <span class="font-bold">{{ tournament.maxAge }}</span></span>
+                        </div>
+                        <div class="flex flex-wrap items-center text-secondary my-1">
+                            <span>Gender: <span class="font-bold">{{ tournament.gender }}</span></span>
+                        </div>
+                        <div class="flex flex-wrap items-center text-secondary my-1">
+                            <span (click)="openUserTournamentDialog()">Participants: <span
+                                    class="text-blue-700 cursor-pointer underline">View
+                                    Participants</span> </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-center text-secondary my-1">
-                    <span>Registration deadline: {{ tournament.registerDuration | date:'dd-MM-YYYY' }}</span>
-                </div>
-                <div class="flex flex-wrap items-center text-secondary my-1">
-                    <span class="whitespace-nowrap">Start date: {{ tournament.startTime | date:'dd-MM-YYYY' }}</span>
-                </div>
-                <div class="flex flex-wrap items-center text-secondary my-1">
-                    <span class="whitespace-nowrap">End date: {{ tournament.endTime | date:'dd-MM-YYYY' }}</span>
+
+                <div class="">
+                    <div class="flex items-center text-secondary my-1">
+                        <span>Address detail: <span class="font-bold">{{ tournament.address }}</span></span>
+                    </div>
                 </div>
                 <google-map height="300px" width="100%" [zoom]="zoom" [center]="center" [options]="options">
                     <map-marker [position]="marker.position" [label]="marker.label" [options]="marker.options">

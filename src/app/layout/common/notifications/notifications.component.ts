@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
-import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { Notification } from 'app/types/notification.type';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -50,7 +50,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         // Subscribe to notification changes
         this._notificationsService.notifications$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((notifications: Notification[]) => {
+            .subscribe((notifications) => {
                 // Load the notifications
                 this.notifications = notifications;
 
@@ -118,7 +118,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
      */
     toggleRead(notification: Notification): void {
         // Toggle the read status
-        notification.read = !notification.read;
+        notification.isRead = !notification.isRead;
 
         // Update the notification
         this._notificationsService.update(notification.id, notification).subscribe();
@@ -202,7 +202,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         let count = 0;
 
         if (this.notifications && this.notifications.length) {
-            count = this.notifications.filter(notification => !notification.read).length;
+            count = this.notifications.filter(notification => !notification.isRead).length;
         }
 
         this.unreadCount = count;

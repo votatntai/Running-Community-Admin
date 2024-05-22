@@ -16,6 +16,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'enviroments/environment.prod';
 
 export const appConfig: ApplicationConfig = {
+
     providers: [
         importProvidersFrom(AngularFireModule.initializeApp(environment.firebase)),
         provideAnimations(),

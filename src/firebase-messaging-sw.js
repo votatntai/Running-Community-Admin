@@ -18,16 +18,14 @@ messaging.onBackgroundMessage((payload) => {
         const notificationTitle = payload.notification.title;
         const notificationOptions = {
             body: payload.notification.body,
-            icon: '/assets/icons/icon-72x72.png',
+            icon: '/assets/images/logo/logo.png',
             renotify: false,
             timestamp: Date.now()
         };
-
         // Kiểm tra xem có thông báo nào đang được hiển thị hay không
         if (notifications.some(notification => notification.title === notificationTitle && notification.body === notificationOptions.body)) {
             return;
         }
-
         // Hiển thị thông báo nếu không có thông báo nào đang được hiển thị
         self.registration.showNotification(notificationTitle, notificationOptions);
     });

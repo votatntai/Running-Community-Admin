@@ -13,11 +13,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatStepperModule } from '@angular/material/stepper';
 import { GoogleMap, GoogleMapsModule, MapInfoWindow } from '@angular/google-maps';
+import { dateValidator } from '@fuse/validators/tournaments/tournament-date-validator';
 
 @Component({
     selector: 'app-create-tournament',
     templateUrl: 'create-tournament.component.html',
-    styleUrls: ['create-tournament.component.css'],
     standalone: true,
     imports: [MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatButtonModule, MatPaginatorModule, MatSortModule,
         MatSelectModule, MatDialogModule, MatAutocompleteModule, MatDatepickerModule, MatStepperModule, GoogleMapsModule]
@@ -74,6 +74,9 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
                 lat: lat,
                 lng: lng
             };
+
+            this.setTournamentLatLng(lat, lng);
+
             this.addMarker();
         });
     }
@@ -92,7 +95,10 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
             address: ['', [Validators.required]],
             longitude: ['', [Validators.required]],
             latitude: ['', [Validators.required]],
-        });
+            minAge: [12, [Validators.required]],
+            maxAge: [60, [Validators.required]],
+            gender: ['Male', [Validators.required]],
+        }, { validators: dateValidator() });
     }
 
     private initPositionForm() {
@@ -106,6 +112,10 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
         this.thumbnailForm = this._formBuilder.group({
             thumbnail: [[Validators.required]],
         });
+    }
+
+    onGenderChanged(event: any) {
+        this.createTournamentForm.controls['gender'].setValue(event.value);
     }
 
     selectFile() {
@@ -128,17 +138,8 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
             lat: event.latLng.lat(),
             lng: event.latLng.lng()
         };
-        this.createTournamentForm.controls['longitude'].setValue(event.latLng.lng());
-        this.createTournamentForm.controls['latitude'].setValue(event.latLng.lat());
+        this.setTournamentLatLng(event.latLng.lng(), event.latLng.lat());
         this.addMarker();
-    }
-
-    onAutocompleteSelected(place: google.maps.places.PlaceResult) {
-        // Ví dụ: di chuyển bản đồ đến địa điểm được chọn
-        this.center = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-        };
     }
 
     createTournament() {
@@ -154,8 +155,10 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
         formData.append('thumbnail', this.imageFile);
         this._tournamentServive.createTournament(formData).subscribe(result => {
             if (result) {
-                this.matDialogRef.close()
+                this.matDialogRef.close('success')
             }
+        }, error => {
+            this.matDialogRef.close(error)
         });
     }
 
@@ -165,10 +168,12 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
                 lat: this.center.lat,
                 lng: this.center.lng,
             },
-            label: {
-                color: 'red',
-            },
             options: { animation: google.maps.Animation.BOUNCE },
         }
+    }
+
+    private setTournamentLatLng(lat, lng): void {
+        this.createTournamentForm.controls['longitude'].setValue(lat);
+        this.createTournamentForm.controls['latitude'].setValue(lng);
     }
 }

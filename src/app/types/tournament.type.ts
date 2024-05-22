@@ -12,5 +12,8 @@ export interface Tournament {
     address: string,
     longitude: number,
     latitude: number,
+    minAge: string,
+    maxAge: string,
+    gender: string,
     createAt: string,
 }

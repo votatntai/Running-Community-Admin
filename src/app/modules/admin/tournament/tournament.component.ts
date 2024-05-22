@@ -1,24 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { fuseAnimations } from '@fuse/animations';
-import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import { TournamentService } from './tournament.service';
-import { Pagination } from 'app/types/pagination.type';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { Tournament } from 'app/types/tournament.type';
-import { CreateTournamentComponent } from './create/create-tournament.component';
-import { PipesModule } from 'app/pipes/pipe.module';
-import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { TournamentDetailComponent } from './detail/tournament-detail.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import { fuseAnimations } from '@fuse/animations';
+import { FuseAlertComponent } from '@fuse/components/alert';
+import { PipesModule } from 'app/pipes/pipe.module';
+import { Pagination } from 'app/types/pagination.type';
+import { Tournament } from 'app/types/tournament.type';
+import { Observable, Subject, debounceTime, map, merge, switchMap, takeUntil } from 'rxjs';
+import { CreateTournamentComponent } from './create/create-tournament.component';
+import { TournamentDetailComponent } from './detail/tournament-detail.component';
+import { TournamentService } from './tournament.service';
+import { UpdateTournamentComponent } from './update/update-tournament.component';
 
 @Component({
     selector: 'app-tournament',
@@ -30,7 +32,7 @@ import { Router } from '@angular/router';
     standalone: true,
     imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule,
         ReactiveFormsModule, MatInputModule, MatSortModule, MatPaginatorModule, PipesModule,
-        MatSelectModule, MatOptionModule
+        MatSelectModule, MatOptionModule, FuseAlertComponent
     ]
 })
 
@@ -53,9 +55,9 @@ export class TournamentComponent implements OnInit, AfterViewInit {
 
     constructor(
         private router: Router,
+        private _dialog: MatDialog,
         private _tournamentService: TournamentService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _dialog: MatDialog
     ) { }
 
     ngOnInit() {
@@ -142,9 +144,23 @@ export class TournamentComponent implements OnInit, AfterViewInit {
         }).afterClosed().subscribe(result => {
             // After dialog closed
             if (result === 'success') {
-                this.showFlashMessage(result, 'Tạo mới thành công', 3000);
+                this.showFlashMessage(result, 'Create successfull', 3000);
             } else {
-                this.showFlashMessage(result, 'Đã có lỗi xảy ra', 3000);
+                this.showFlashMessage(result, 'Undefined error', 3000);
+            }
+        })
+    }
+
+    onUpdateTournamentButtonClicked(tournament: Tournament) {
+        this._dialog.open(UpdateTournamentComponent, {
+            width: '1080px',
+            data: tournament
+        }).afterClosed().subscribe(result => {
+            // After dialog closed
+            if (result === 'success') {
+                this.showFlashMessage(result, 'Update successfull', 3000);
+            } else {
+                this.showFlashMessage(result, 'Undefined error', 3000);
             }
         })
     }

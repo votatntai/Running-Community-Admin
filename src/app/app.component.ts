@@ -23,7 +23,5 @@ export class AppComponent {
     }
 
     ngOnInit(): void {
-        this._appService.notifications$.subscribe(notification => {
-        })
     }
 }

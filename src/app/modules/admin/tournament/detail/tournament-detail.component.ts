@@ -4,7 +4,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +17,8 @@ import { Tournament } from 'app/types/tournament.type';
 import { FuseCardComponent } from '@fuse/components/card';
 import { CommonModule } from '@angular/common';
 import { PipesModule } from 'app/pipes/pipe.module';
+import { Router } from '@angular/router';
+import { UserTournamentComponent } from '../user-tournament/user-tournament.component';
 
 @Component({
     selector: 'app-tournament-detail',
@@ -40,6 +42,8 @@ export class TournamentDetailComponent implements OnInit {
     constructor(
         private _tournamentService: TournamentService,
         public matDialogRef: MatDialogRef<TournamentDetailComponent>,
+        private router: Router,
+        private _dialog: MatDialog,
     ) { }
 
     ngOnInit() {
@@ -64,5 +68,16 @@ export class TournamentDetailComponent implements OnInit {
             },
             options: { animation: google.maps.Animation.BOUNCE },
         }
+    }
+
+    openUserTournamentDialog() {
+        this.router.navigate(['/tournaments/' + this.tournament.id + '/users']).then(() => {
+            this._dialog.open(UserTournamentComponent, {
+                width: '720px',
+                autoFocus: false
+            }).afterClosed().subscribe(data => {
+                this.router.navigate(['/tournaments', this.tournament.id]);
+            })
+        });
     }
 }
