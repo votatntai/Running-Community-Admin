@@ -81,7 +81,13 @@
                             "vendorChunk": true,
                             "extractLicenses": false,
                             "sourceMap": true,
-                            "namedChunks": true
+                            "namedChunks": true,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.prod.ts",
+                                    "with": "src/environments/environment.development.ts"
+                                }
+                            ]
                         }
                     },
                     "defaultConfiguration": "production"
@@ -90,10 +96,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                          "buildTarget": "fuse:build:production"
+                            "buildTarget": "fuse:build:production"
                         },
                         "development": {
-                          "buildTarget": "fuse:build:development"
+                            "buildTarget": "fuse:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -101,7 +107,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                      "buildTarget": "fuse:build"
+                        "buildTarget": "fuse:build"
                     }
                 },
                 "test": {

@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpRequest } from '@angul
 import { inject } from '@angular/core';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
-import { environment } from 'enviroments/environment.prod';
+import { environment } from 'environments/environment.prod';
 import { catchError, Observable, throwError } from 'rxjs';
 
 /**

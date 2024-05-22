@@ -75,12 +75,16 @@ export class UpdateTournamentComponent implements OnInit {
                 formData.append(key, control.value);
             }
         });
-        this._tournamentServive.updateTournament(this.data.id, formData).subscribe(result => {
-            if (result) {
-                this.matDialogRef.close('success')
-            }
-        }, error => {
-            this.matDialogRef.close(error)
-        });
+
+        if (this.updateTournamentForm.valid) {
+            this._tournamentServive.updateTournament(this.data.id, formData).subscribe(result => {
+                if (result) {
+                    this.matDialogRef.close('success')
+                }
+            }, error => {
+                this.matDialogRef.close(error)
+            });
+        }
     }
+
 }

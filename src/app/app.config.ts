@@ -13,7 +13,7 @@ import { provideIcons } from 'app/core/icons/icons.provider';
 import { mockApiServices } from 'app/mock-api';
 import { TranslocoHttpLoader } from './core/transloco/transloco.http-loader';
 import { AngularFireModule } from '@angular/fire/compat';
-import { environment } from 'enviroments/environment.prod';
+import { environment } from 'environments/environment.prod';
 
 export const appConfig: ApplicationConfig = {
 
