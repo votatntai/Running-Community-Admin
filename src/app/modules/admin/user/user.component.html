@@ -1,8 +1,10 @@
-<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
-
+<div
+    class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
+>
     <!-- Header -->
     <div
-        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b"
+    >
         <!-- Loader -->
         <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
             <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
@@ -12,52 +14,79 @@
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 gap-3">
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64">
-                <mat-select required [value]="''" (selectionChange)="onStatusFilterChanged($event)">
+                <mat-select
+                    required
+                    [value]="''"
+                    (selectionChange)="onStatusFilterChanged($event)"
+                >
                     <mat-option [value]="''">All Status</mat-option>
                     <mat-option [value]="'Active'">Active</mat-option>
                     <mat-option [value]="'Blocked'">Blocked</mat-option>
                 </mat-select>
             </mat-form-field>
             <!-- Search -->
-            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
-                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
-                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search'">
+            <mat-form-field
+                class="fuse-mat-dense fuse-mat-rounded min-w-64"
+                [subscriptSizing]="'dynamic'"
+            >
+                <mat-icon
+                    class="icon-size-5"
+                    matPrefix
+                    [svgIcon]="'heroicons_solid:magnifying-glass'"
+                ></mat-icon>
+                <input
+                    matInput
+                    [formControl]="searchInputControl"
+                    [autocomplete]="'off'"
+                    [placeholder]="'Search'"
+                />
             </mat-form-field>
         </div>
     </div>
 
     <!-- Users list -->
-    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
-        <ng-container *ngIf="(users$ | async) as users">
+    <div
+        class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
+    >
+        <ng-container *ngIf="users$ | async as users">
             <div class="grid">
                 <!-- Header -->
-                <div class="user-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                    matSort matSortDisableClear>
+                <div
+                    class="user-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                    matSort
+                    matSortDisableClear
+                >
                     <div>Avatar</div>
                     <div>Name</div>
-                    <div class="hidden sm:block">
-                        Phone
-                    </div>
-                    <div class="hidden sm:block">
-                        Address
-                    </div>
+                    <div class="hidden sm:block">Phone</div>
+                    <div class="hidden sm:block">Address</div>
                     <div class="hidden sm:block">Status</div>
                     <div class="hidden sm:block">Detail</div>
                 </div>
                 <!-- Rows -->
                 <ng-container *ngIf="users.length > 0; else noUsers">
-                    <ng-container *ngIf="(users$ | async) as users">
-                        <ng-container *ngFor="let user of users; trackBy: trackByFn">
-                            <div class="user-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-
+                    <ng-container *ngIf="users$ | async as users">
+                        <ng-container
+                            *ngFor="let user of users; trackBy: trackByFn"
+                        >
+                            <div
+                                class="user-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
+                            >
                                 <!-- Image -->
                                 <div class="flex items-center">
                                     <div
-                                        class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
-                                        <img class="w-8" *ngIf="user.avatarUrl" [alt]="'User thumbnail image'"
-                                            [src]="user.avatarUrl">
-                                        <div class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
-                                            *ngIf="!user.avatarUrl">
+                                        class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border"
+                                    >
+                                        <img
+                                            class="w-8"
+                                            *ngIf="user.avatarUrl"
+                                            [alt]="'User thumbnail image'"
+                                            [src]="user.avatarUrl"
+                                        />
+                                        <div
+                                            class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
+                                            *ngIf="!user.avatarUrl"
+                                        >
                                             NO THUMB
                                         </div>
                                     </div>
@@ -65,79 +94,100 @@
 
                                 <!-- Name -->
                                 <div class="truncate">
-                                    {{user.name}}
+                                    {{ user.name }}
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="hidden sm:block">
-                                    {{user.phone}}
+                                    {{ user.phone }}
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="hidden sm:block">
-                                    {{user.address}}
+                                    {{ user.address }}
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="hidden sm:block">
-                                    <div [innerHTML]="user.status | userStatus"></div>
+                                    <div
+                                        [innerHTML]="user.status | userStatus"
+                                    ></div>
                                 </div>
 
                                 <!-- Action -->
                                 <div class="hidden sm:block">
                                     <div class="flex gap-3">
-                                        <span [routerLink]="['/users', user.id]">
-                                            <mat-icon class="text-blue-500 icon-size-5 cursor-pointer"
-                                                [svgIcon]="'heroicons_outline:eye'"></mat-icon>
-                                        </span>
                                         @if (user.status == 'Active') {
-                                        <span (click)="onBlockGroupClicked(user.id)">
-                                            <mat-icon svgIcon="heroicons_outline:lock-closed"
-                                                class="text-red-500 icon-size-5 cursor-pointer"></mat-icon>
+                                        <span
+                                            (click)="
+                                                onBlockGroupClicked(user.id)
+                                            "
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:lock-closed"
+                                                class="text-red-500 icon-size-5 cursor-pointer"
+                                            ></mat-icon>
                                         </span>
                                         } @else {
-                                        <span (click)="onUnBlockGroupClicked(user.id)">
-                                            <mat-icon svgIcon="heroicons_outline:lock-open"
-                                                class="text-green-500 icon-size-5 cursor-pointer"></mat-icon>
+                                        <span
+                                            (click)="
+                                                onUnBlockGroupClicked(user.id)
+                                            "
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:lock-open"
+                                                class="text-green-500 icon-size-5 cursor-pointer"
+                                            ></mat-icon>
                                         </span>
                                         }
                                     </div>
                                 </div>
-
                             </div>
                         </ng-container>
                     </ng-container>
                 </ng-container>
-
             </div>
 
             <mat-paginator
                 class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.totalRow"
-                [pageIndex]="pagination.pageNumber" [pageSize]="pagination.pageSize"
-                [pageSizeOptions]="[5, 10, 25, 100]" [showFirstLastButtons]="true">
+                [ngClass]="{ 'pointer-events-none': isLoading }"
+                [length]="pagination.totalRow"
+                [pageIndex]="pagination.pageNumber"
+                [pageSize]="pagination.pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                [showFirstLastButtons]="true"
+            >
             </mat-paginator>
         </ng-container>
 
         <ng-template #noUsers>
-            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Not found!
+            <div
+                class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+            >
+                Not found!
             </div>
         </ng-template>
-
     </div>
-
 </div>
 
 <!-- Notification -->
 <a class="cursor-pointer" *ngIf="flashMessage">
-    <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'success'" [appearance]="'border'"
-        *ngIf="flashMessage === 'success'">
+    <fuse-alert
+        class="absolute bottom-0 right-0 z-999"
+        [type]="'success'"
+        [appearance]="'border'"
+        *ngIf="flashMessage === 'success'"
+    >
         <span fuseAlertTitle>Thành công</span>
-        {{message}}
+        {{ message }}
     </fuse-alert>
-    <fuse-alert class="absolute bottom-0 right-0 z-999" [type]="'error'" [appearance]="'border'"
-        *ngIf="flashMessage === 'error'">
+    <fuse-alert
+        class="absolute bottom-0 right-0 z-999"
+        [type]="'error'"
+        [appearance]="'border'"
+        *ngIf="flashMessage === 'error'"
+    >
         <span fuseAlertTitle>Có lỗi xảy ra</span>
-        {{message}}
+        {{ message }}
     </fuse-alert>
 </a>

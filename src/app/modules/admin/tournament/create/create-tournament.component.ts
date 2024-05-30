@@ -97,7 +97,7 @@ export class CreateTournamentComponent implements OnInit, AfterViewInit {
             latitude: ['', [Validators.required]],
             minAge: [12, [Validators.required]],
             maxAge: [60, [Validators.required]],
-            gender: ['Male', [Validators.required]],
+            gender: ['None', [Validators.required]],
         }, { validators: dateValidator() });
     }
 

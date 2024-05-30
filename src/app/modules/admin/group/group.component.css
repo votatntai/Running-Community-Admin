@@ -50,3 +50,71 @@
 .mat-mdc-form-field-subscript-wrapper {
     display: none !important;
 }
+
+.wheel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wheel {
+    margin: 20px 0;
+}
+
+.wheel {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 5px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.wheel .segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: #f4a142;
+    transform-origin: 100% 100%;
+    border: 3px solid #333;
+}
+
+/* .segment:nth-child(1) {
+    transform: rotate(0deg) translateX(50%) rotate(60deg);
+}
+
+.segment:nth-child(2) {
+    transform: rotate(60deg) translateX(50%) rotate(60deg);
+}
+
+.segment:nth-child(3) {
+    transform: rotate(120deg) translateX(50%) rotate(60deg);
+}
+
+.segment:nth-child(4) {
+    transform: rotate(180deg) translateX(50%) rotate(60deg);
+}
+
+.segment:nth-child(5) {
+    transform: rotate(240deg) translateX(50%) rotate(60deg);
+}
+
+.segment:nth-child(6) {
+    transform: rotate(300deg) translateX(50%) rotate(60deg);
+} */
+
+.spin {
+    transition: transform 5s ease-out;
+}
+
+.pointer {
+    /* position: absolute;
+    top: 50%;
+    left: 50%; */
+    transform: translate(-50%, -100%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid red;
+}

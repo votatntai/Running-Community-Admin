@@ -34,6 +34,10 @@ import { GroupService } from './group.service';
 
 export class GroupComponent implements OnInit, AfterViewInit {
 
+    segments = [1, 2, 3, 4, 5, 6];
+    isSpinning = false;
+    currentDegree = 0;
+
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
 
@@ -160,5 +164,21 @@ export class GroupComponent implements OnInit, AfterViewInit {
             this.flashMessage = this.message = null;
             this._changeDetectorRef.markForCheck();
         }, time);
+    }
+
+    spin() {
+        if (this.isSpinning) {
+            return;
+        }
+
+        this.isSpinning = true;
+        const spinDegree = Math.floor(Math.random() * 360) + 720; // Xoay ít nhất 2 vòng
+        this.currentDegree += spinDegree;
+
+        setTimeout(() => {
+            this.isSpinning = false;
+            const actualDegree = this.currentDegree % 360;
+            console.log('Final Degree:', actualDegree);
+        }, 5000);
     }
 }
