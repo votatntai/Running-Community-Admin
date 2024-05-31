@@ -62,10 +62,14 @@ export class UpdateTournamentComponent implements OnInit {
     }
 
     onGenderChanged(event: any) {
+        console.log(event);
         this.updateTournamentForm.controls['gender'].setValue(event.value);
     }
 
     updateTournament() {
+        console.log(this.updateTournamentForm.value);
+        console.log(this.updateTournamentForm.valid);
+
         const formData = new FormData();
         var formGroup = this.updateTournamentForm;
 
